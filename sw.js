@@ -1,5 +1,5 @@
 /* Kikoeru static replica: intercept /api/* and serve local JSON. Frontend unchanged. */
-const VERSION = "v10";
+const VERSION = "v11";
 const CACHE = "kikoeru-data-" + VERSION;
 const PRELOAD = [
   "data/shared.json",
@@ -131,15 +131,20 @@ async function handleApi(u, rawPath, ev) {
     const cm = p.match(/^\/api\/cover\/(\d+)/);
     if (cm) {
       try {
-        const r = await fetch("data/covers/" + cm[1] + ".jpg");
+        let r = await fetch("data/covers/" + cm[1] + ".webp");
+        let ctype = "image/webp";
+        if (!r.ok) {
+          r = await fetch("data/covers/" + cm[1] + ".jpg");
+          ctype = "image/jpeg";
+        }
         if (r.ok) {
           const buf = await r.arrayBuffer();
           return new Response(buf, {
             status: 200,
             headers: {
-              "Content-Type": "image/jpeg",
+              "Content-Type": ctype,
               "Content-Length": String(buf.byteLength),
-              "Cache-Control": "public, max-age=604800",
+              "Cache-Control": "public, max-age=31536000, immutable",
             },
           });
         }
