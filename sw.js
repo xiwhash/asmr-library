@@ -1,5 +1,5 @@
 /* Kikoeru static replica: intercept /api/* and serve local JSON. Frontend unchanged. */
-const VERSION = "v15";
+const VERSION = "v16";
 const CACHE = "kikoeru-data-" + VERSION;
 const PRELOAD = [
   "data/shared.json",
@@ -11,7 +11,7 @@ const PRELOAD = [
 self.addEventListener("install", (ev) => {
   ev.waitUntil(
     caches.open(CACHE)
-      .then((c) => Promise.all(PRELOAD.map((p) => c.add(p).catch(() => null))))
+      .then((c) => Promise.all(PRELOAD.map((p) => c.add(p + "?v=" + VERSION).catch(() => null))))
       .then(() => self.skipWaiting())
   );
 });
@@ -26,10 +26,11 @@ self.addEventListener("activate", (ev) => {
 
 async function loadJson(path) {
   const c = await caches.open(CACHE);
-  let r = await c.match(path, { ignoreSearch: true });
+  const url = path + "?v=" + VERSION;
+  let r = await c.match(url);
   if (!r) {
-    r = await fetch(path + "?v=" + VERSION, { cache: "no-store" });
-    if (r.ok) c.put(path, r.clone());
+    r = await fetch(url, { cache: "no-store" });
+    if (r.ok) c.put(url, r.clone());
   }
   if (!r || !r.ok) return null;
   try { return await r.json(); } catch (e) { return null; }
