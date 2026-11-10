@@ -61,16 +61,19 @@
   }
 
   if ("serviceWorker" in navigator) {
+    var started = false;
+    function once() { if (!started) { started = true; start(); } }
     navigator.serviceWorker.register("/asmr-library/sw.js", { scope: "/asmr-library/" })
       .then(function () {
-        if (navigator.serviceWorker.controller) { start(); return; }
+        if (navigator.serviceWorker.controller) { once(); return; }
+        navigator.serviceWorker.addEventListener("controllerchange", once);
+        /* fallback: start anyway after 2.5s so the page never stays blank */
+        setTimeout(once, 2500);
         navigator.serviceWorker.ready.then(function () {
-          if (navigator.serviceWorker.controller) { start(); }
-          else { location.reload(); }
+          if (navigator.serviceWorker.controller) once();
         });
-        navigator.serviceWorker.addEventListener("controllerchange", start);
       })
-      .catch(function () { start(); });
+      .catch(function () { once(); });
   } else {
     start();
   }
