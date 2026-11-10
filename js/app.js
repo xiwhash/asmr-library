@@ -250,7 +250,7 @@
     },
     A = {
       async searchTask(t, e, s, a) {
-        const i = "/api/lyric/translate",
+        const i = "/asmr-library/api/lyric/translate",
           r = {
             page: t,
             work_id: e || 0,
@@ -275,82 +275,82 @@
 	        return a.tasks.map(this.polishTask);
 	      },
 	      async searchWorkTaskStatus(t) {
-	        const e = await _.a.get("/api/lyric/work-status/" + t);
+	        const e = await _.a.get("/asmr-library/api/lyric/work-status/" + t);
 	        return e.data.tasks.map(this.polishTask);
 	      },
 	      async translateAudio(t) {
-        const e = "/api/lyric/translate/" + t,
+        const e = "/asmr-library/api/lyric/translate/" + t,
           s = await _.a.put(e);
         return s.data;
       },
       async deleteTask(t, e) {
-        const s = "/api/lyric/translate/" + t,
+        const s = "/asmr-library/api/lyric/translate/" + t,
           a = await _.a.delete(s, { data: { idArr: e } });
         return a.data;
       },
       async redoTask(t, e) {
-        const s = "/api/lyric/translate/redo/" + t,
+        const s = "/asmr-library/api/lyric/translate/redo/" + t,
           a = await _.a.post(s, { idArr: e });
         return a.data;
       },
       async downloadLrc(t) {
-        const e = await _.a.get("/api/lyric/translate/lrc", {
+        const e = await _.a.get("/asmr-library/api/lyric/translate/lrc", {
           params: { id: t },
         });
         return e.data.lrcContent;
       },
       async queryLyric(t) {
-        const e = await _.a.get("/api/media/query-lrc/" + t);
+        const e = await _.a.get("/asmr-library/api/media/query-lrc/" + t);
         return e.data.lyricList;
       },
       async fetchLyric(t) {
-        const e = await _.a.get("/api/media/fetch-lrc/" + t);
+        const e = await _.a.get("/asmr-library/api/media/fetch-lrc/" + t);
         return e.data.lrc;
       },
       async saveLyric(t, e, s) {
-        const a = await _.a.post("/api/media/save-lrc/" + t, {
+        const a = await _.a.post("/asmr-library/api/media/save-lrc/" + t, {
           writePath: e,
           lrc: s,
         });
         return a.data;
       },
       async saveEditMeta(t, e) {
-        const s = await _.a.post("/api/edit/work/" + t, e);
+        const s = await _.a.post("/asmr-library/api/edit/work/" + t, e);
         return s.data;
       },
       async getCandidates(t) {
-        const e = (await _.a.get(`/api/${t}s`)).data.slice();
+        const e = (await _.a.get(`/asmr-library/api/${t}s`)).data.slice();
         return e.sort((t, e) => e.count - t.count);
       },
       async saveEditImg(t, e, s = "main", a = "img.jpg") {
         const i = await $(e, "image/jpeg"),
           r = new FormData();
         (r.append("file", i, a), r.append("type", s));
-        const o = await _.a.post("/api/edit/img/" + t, r, {
+        const o = await _.a.post("/asmr-library/api/edit/img/" + t, r, {
           headers: { "Content-Type": "multipart/form-data" },
         });
         return o.data;
       },
       async recoverEditImg(t, e = "main") {
-        const s = await _.a.post("/api/edit/recover/img/" + t, { type: e });
+        const s = await _.a.post("/asmr-library/api/edit/recover/img/" + t, { type: e });
         return s.data;
       },
       async askForTranscoding(t, e) {
-        const s = await _.a.post(`/api/media/pre-transcode/${t}?bitRate=${e}`);
+        const s = await _.a.post(`/asmr-library/api/media/pre-transcode/${t}?bitRate=${e}`);
         return s.data;
       },
       async getTranscodingStatus(t, e) {
-        const s = await _.a.get(`/api/media/pre-transcode/${t}?bitRate=${e}`);
+        const s = await _.a.get(`/asmr-library/api/media/pre-transcode/${t}?bitRate=${e}`);
         return s.data;
       },
       async getSyncInfo(t, e, s, a) {
-        const i = await _.a.get("/api/syncer", {
+        const i = await _.a.get("/asmr-library/api/syncer", {
           params: { host: t, metaApi: e, trackApi: s, filter: a },
         });
         return i.data.tracks;
       },
       async newSyncTask(t, e, s, a, i) {
-        const r = await _.a.post("/api/syncer", {
+        const r = await _.a.post("/asmr-library/api/syncer", {
           host: t,
           code: e,
           rootFolderName: s,
@@ -360,23 +360,23 @@
         return r.data.id;
       },
       async getSyncTaskListStatus() {
-        const t = await _.a.get("/api/syncer/task");
+        const t = await _.a.get("/asmr-library/api/syncer/task");
         return t.data.info;
       },
       async deleteSyncTask(t) {
-        const e = await _.a.delete("/api/syncer/task?id=" + t);
+        const e = await _.a.delete("/asmr-library/api/syncer/task?id=" + t);
         return e.data.success;
       },
       async stopSyncTask(t) {
-        const e = await _.a.post("/api/syncer/task/stop?id=" + t);
+        const e = await _.a.post("/asmr-library/api/syncer/task/stop?id=" + t);
         return e.data.success;
       },
       async restartSyncTask(t) {
-        const e = await _.a.post("/api/syncer/task/restart?id=" + t);
+        const e = await _.a.post("/asmr-library/api/syncer/task/restart?id=" + t);
         return e.data.success;
       },
       async getServerConfig() {
-        const t = await _.a.get("/api/config/admin");
+        const t = await _.a.get("/asmr-library/api/config/admin");
         return t.data.config;
       },
     };
@@ -664,7 +664,7 @@
           let a = n["a"].getItem(e);
           if (!a) {
             const e = dt.currentPlayingFile(t).hash;
-            a = "/api/cover/" + e.split("/")[0];
+            a = "/asmr-library/api/cover/" + e.split("/")[0];
           }
           t.visualPlayerCoverUrl = a;
         }
@@ -1767,7 +1767,7 @@
         samCoverUrl() {
           const t = this.$q.localStorage.getItem("jwt-token") || "",
             e = this.currentPlayingFile.hash;
-          return e ? `/api/cover/${e.split("/")[0]}?type=sam&token=${t}` : "";
+          return e ? `/asmr-library/api/cover/${e.split("/")[0]}?type=sam&token=${t}` : "";
         },
         showPlayBar() {
           return this.currentPlayingFile.hash && this.hide;
@@ -3490,7 +3490,7 @@
           ) {
             const e = this.transcodeBitRate;
             return appendTokenToMediaUrl(
-              `/api/media/transcode/${this.currentPlayingFile.hash}?bitRate=${e}`,
+              `/asmr-library/api/media/transcode/${this.currentPlayingFile.hash}?bitRate=${e}`,
               t,
             );
           }
@@ -3498,7 +3498,7 @@
             ? appendTokenToMediaUrl(this.currentPlayingFile.mediaStreamUrl, t)
             : this.currentPlayingFile.hash
               ? appendTokenToMediaUrl(
-                  `/api/media/stream/${this.currentPlayingFile.hash}`,
+                  `/asmr-library/api/media/stream/${this.currentPlayingFile.hash}`,
                   t,
                 )
               : "";
@@ -3688,7 +3688,7 @@
         async loadLrcFile() {
           const t = this.$q.localStorage.getItem("jwt-token") || "",
             e = this.queue[this.queueIndex].hash,
-            s = `/api/media/check-lrc/${e}?token=${t}`;
+            s = `/asmr-library/api/media/check-lrc/${e}?token=${t}`;
           try {
             const a = localStorage.getItem("kikoeruLyricChoice:" + e);
             if (a) {
@@ -3696,7 +3696,7 @@
                 const e = JSON.parse(a);
                 if (e && e.hash) {
                   const s = await this.$axios.get(
-                    "/api/media/fetch-lrc/" +
+                    "/asmr-library/api/media/fetch-lrc/" +
                       (e.isAI
                         ? `${this.playWorkId}/${e.hash}/1`
                         : e.hash + "/0") +
@@ -3789,7 +3789,7 @@
               ? appendTokenToMediaUrl(this.visualPlayerCoverUrl, s)
               : ""
             : 0 != t
-              ? `/api/cover/${t}?type=${e}&token=${s}`
+              ? `/asmr-library/api/cover/${t}?type=${e}&token=${s}`
               : "";
         },
         onChangeSlider(t) {
@@ -4655,7 +4655,7 @@
         coverUrl() {
           const t = this.$q.localStorage.getItem("jwt-token") || "",
             e = this.currentPlayingFile.hash;
-          return e ? `/api/cover/${e.split("/")[0]}?token=${t}` : "";
+          return e ? `/asmr-library/api/cover/${e.split("/")[0]}?token=${t}` : "";
         },
         workDetailUrl() {
           const t = this.currentPlayingFile;
@@ -6011,11 +6011,11 @@
         },
         workSamCoverUrl(t) {
           const e = this.$q.localStorage.getItem("jwt-token") || "";
-          return t ? `/api/cover/${t}?type=sam&token=${e}` : "";
+          return t ? `/asmr-library/api/cover/${t}?type=sam&token=${e}` : "";
         },
         samCoverUrl(t) {
           const e = this.$q.localStorage.getItem("jwt-token") || "";
-          return t ? `/api/cover/${t.split("/")[0]}?type=sam&token=${e}` : "";
+          return t ? `/asmr-library/api/cover/${t.split("/")[0]}?type=sam&token=${e}` : "";
         },
         decorateQueueItemWithWork(t, e) {
           return Object.assign({}, t, {
@@ -6099,7 +6099,7 @@
             };
           t && (e.keyword = t);
           try {
-            const s = await this.$axios.get(t ? "/api/search" : "/api/works", {
+            const s = await this.$axios.get(t ? "/asmr-library/api/search" : "/asmr-library/api/works", {
               params: e,
             });
             this.addWorkResults = (s.data.works || []).slice(0, 24);
@@ -6118,9 +6118,9 @@
           if (!t || !t.id || this.addWorkLoading) return;
           ((this.addWorkLoading = !0), (this.addWorkError = ""));
           try {
-            const e = await this.$axios.get("/api/work/" + t.id),
+            const e = await this.$axios.get("/asmr-library/api/work/" + t.id),
               s = e.data,
-              a = await this.$axios.get("/api/tracks/" + s.id),
+              a = await this.$axios.get("/asmr-library/api/tracks/" + s.id),
               i = this.flattenAudioQueue(a.data, s);
             if (!i.length) {
               this.addWorkError = "这个作品没有可加入的音频文件";
@@ -6250,7 +6250,7 @@
           this.isSameTwoHistory(this.latestUpdatedHistory, t)
             ? console.log("播放状态未变，跳过服务器历史更新")
             : this.$axios
-                .put("/api/histroy", t)
+                .put("/asmr-library/api/histroy", t)
                 .then((e) => {
                   (console.log("更新播放状态成功"),
                     (this.latestUpdatedHistory = t));
@@ -7593,7 +7593,7 @@
 	        },
 	        initUser() {
           this.$axios
-            .get("/api/auth/me")
+            .get("/asmr-library/api/auth/me")
             .then((t) => {
               (this.$store.commit("User/INIT", t.data.user),
                 this.$store.commit("User/SET_AUTH", t.data.auth),
@@ -7615,7 +7615,7 @@
         },
         checkUpdate() {
           this.$axios
-            .get("/api/version")
+            .get("/asmr-library/api/version")
             .then((t) => {
               (t.data.update_available &&
                 t.data.notifyUser &&
@@ -7660,7 +7660,7 @@
         },
         readSharedConfig() {
           this.$axios
-            .get("/api/config/shared")
+            .get("/asmr-library/api/config/shared")
             .then((t) => {
               this.sharedConfig = t.data.sharedConfig;
             })
@@ -7683,7 +7683,7 @@
         requestRandomWork() {
           const t = { order: "betterRandom" };
           this.$axios
-            .get("/api/works", { params: t })
+            .get("/asmr-library/api/works", { params: t })
             .then((t) => {
               const e = t.data.works;
               e.length ? this.$router.push(this.workRoute(e[0])) : (this.randId = null);
@@ -9034,7 +9034,7 @@
       computed: {
         coverUrl() {
           const t = this.$q.localStorage.getItem("jwt-token") || "";
-          return this.workid ? `/api/cover/${this.workid}?token=${t}` : "";
+          return this.workid ? `/asmr-library/api/cover/${this.workid}?token=${t}` : "";
         },
 	        rjcode() {
 	          return T(this.primary_work_id || this.workid);
@@ -9126,7 +9126,7 @@
         shortHumanReadableSeconds: j,
         submitRating(t) {
           this.$axios
-            .put("/api/review", t)
+            .put("/asmr-library/api/review", t)
             .then((t) => {
               this.showSuccNotif(t.data.message);
             })
@@ -9281,7 +9281,7 @@
         samCoverUrl() {
           const t = this.$q.localStorage.getItem("jwt-token") || "";
           return this.metadata.id
-            ? `/api/cover/${this.metadata.id}?type=sam&token=${t}`
+            ? `/asmr-library/api/cover/${this.metadata.id}?type=sam&token=${t}`
             : "";
         },
       },
@@ -9521,7 +9521,7 @@
             s = (t.coverWorkIds || []).slice(0, 4);
           return (
             s.length || (t.id && s.push(t.id)),
-            s.map((t) => `/api/cover/${t}?type=sam&token=${e}`)
+            s.map((t) => `/asmr-library/api/cover/${t}?type=sam&token=${e}`)
           );
         },
         async getHistory() {
@@ -9529,7 +9529,7 @@
           this.isLoading = !0;
           const t = { page: this.pagination.currentPage + 1, sort: "desc" };
           try {
-            const e = await this.$axios.get("/api/histroy", { params: t });
+            const e = await this.$axios.get("/asmr-library/api/histroy", { params: t });
             const s = 1 === t.page ? this.getCustomPlaylistHistory() : null,
               a = s ? [s].concat(e.data.works) : e.data.works,
               i = Object.assign({}, e.data.pagination);
@@ -9952,7 +9952,7 @@
       methods: {
         submitRating(t) {
           this.$axios
-            .put("/api/review", t)
+            .put("/asmr-library/api/review", t)
             .then((t) => {
               this.showSuccNotif(t.data.message);
             })
@@ -10293,16 +10293,16 @@
         urlDetect() {
           const t = this.$route.query;
           return t.circleId
-            ? `/api/circles/${this.$route.query.circleId}/works`
+            ? `/asmr-library/api/circles/${this.$route.query.circleId}/works`
             : t.tagId
-              ? `/api/tags/${this.$route.query.tagId}/works`
+              ? `/asmr-library/api/tags/${this.$route.query.tagId}/works`
               : t.vaId
-                ? `/api/vas/${this.$route.query.vaId}/works`
+                ? `/asmr-library/api/vas/${this.$route.query.vaId}/works`
                 : t.keyword ||
                     this.isAdvanceSearch ||
                     "/search" == this.$route.path
-                  ? "/api/search"
-                  : "/api/works";
+                  ? "/asmr-library/api/search"
+                  : "/asmr-library/api/works";
         },
         advanceSearchBarHint() {
           return this.searchMetaType === D.FUZZY
@@ -10477,10 +10477,10 @@
               e = "";
             (this.$route.query.circleId
               ? ((e = "circles"),
-                (t = `/api/${e}/${this.$route.query.circleId}`))
+                (t = `/asmr-library/api/${e}/${this.$route.query.circleId}`))
               : this.$route.query.tagId
-                ? ((e = "tags"), (t = `/api/${e}/${this.$route.query.tagId}`))
-                : ((e = "vas"), (t = `/api/${e}/${this.$route.query.vaId}`)),
+                ? ((e = "tags"), (t = `/asmr-library/api/${e}/${this.$route.query.tagId}`))
+                : ((e = "vas"), (t = `/asmr-library/api/${e}/${this.$route.query.vaId}`)),
               this.$axios
                 .get(t)
                 .then((t) => {
@@ -10604,7 +10604,7 @@
             const s = { vas: D.VA, tags: D.TAG, circles: D.CIRCLE };
             for (let a of Object.keys(s))
               try {
-                const t = (await this.$axios.get("/api/" + a)).data.slice();
+                const t = (await this.$axios.get("/asmr-library/api/" + a)).data.slice();
                 e = e.concat(
                   t
                     .sort((t, e) => e.count - t.count)
@@ -11679,7 +11679,7 @@
           const t = { starOnly: !1 },
             e = this.reviewPayload();
           this.$axios
-            .put("/api/review", e, { params: t })
+            .put("/asmr-library/api/review", e, { params: t })
             .then((t) => {
               ((this.modified = !0), this.showSuccNotif(t.data.message));
             })
@@ -11696,7 +11696,7 @@
         deleteReview() {
           const t = { work_id: this.workid };
           this.$axios
-            .delete("/api/review", { params: t })
+            .delete("/asmr-library/api/review", { params: t })
             .then((t) => {
               ((this.modified = !0), this.showSuccNotif(t.data.message));
             })
@@ -12245,7 +12245,7 @@
         submitProgress(t) {
           const e = { starOnly: !1, progressOnly: !0 };
           this.$axios
-            .put("/api/review", t, { params: e })
+            .put("/asmr-library/api/review", t, { params: e })
             .then((t) => {
               (this.showSuccNotif(t.data.message), this.$emit("reset"));
             })
@@ -12268,7 +12268,7 @@
         },
         submitRating(t) {
           this.$axios
-            .put("/api/review", t)
+            .put("/asmr-library/api/review", t)
             .then((t) => {
               (this.showSuccNotif(t.data.message), this.$emit("reset"));
             })
@@ -12297,7 +12297,7 @@
             })
             .onOk(async () => {
               this.$axios
-                .delete("/api/histroy", { data: { work_id: this.metadata.id } })
+                .delete("/asmr-library/api/histroy", { data: { work_id: this.metadata.id } })
                 .then((t) => {
                   this.$q.notify("删除历史成功");
                 })
@@ -12313,7 +12313,7 @@
             const e = this.$q.localStorage.getItem("jwt-token") || "";
             const t = await this.$axios.get(
               appendTokenToMediaUrl(
-                "/api/media/download-lyrics/" +
+                "/asmr-library/api/media/download-lyrics/" +
                   this.metadata.id +
                   "/" +
                   encodeURIComponent(this.dlsiteCode + "_lyrics.zip"),
@@ -12353,7 +12353,7 @@
           if (!this.isAdminUser) return;
           try {
             const t = await this.$axios.post(
-              "/api/work/scan/" + this.metadata.id,
+              "/asmr-library/api/work/scan/" + this.metadata.id,
             );
             t.data.memo && this.$router.go(0);
           } catch (t) {
@@ -12380,7 +12380,7 @@
           if (!this.isAdminUser) return;
           try {
             const t = await this.$axios.post(
-              "/api/work/fix/gbk/" + this.metadata.id,
+              "/asmr-library/api/work/fix/gbk/" + this.metadata.id,
             );
             t.data.memo && this.$router.go(0);
           } catch (t) {
@@ -13839,7 +13839,7 @@
           return this.track.mediaStreamUrl
             ? appendTokenToMediaUrl(this.track.mediaStreamUrl, t)
             : this.track.hash
-              ? appendTokenToMediaUrl(`/api/media/stream/${this.track.hash}`, t)
+              ? appendTokenToMediaUrl(`/asmr-library/api/media/stream/${this.track.hash}`, t)
               : "";
         },
         posterUrl() {
@@ -13850,7 +13850,7 @@
                 : this.track && this.track.hash
                   ? this.track.hash.split("/")[0]
                   : "";
-          return e ? `/api/cover/${e}?token=${t}` : "";
+          return e ? `/asmr-library/api/cover/${e}?token=${t}` : "";
         },
         mimeType() {
           const t = P(this.trackTitle).toLowerCase();
@@ -13876,7 +13876,7 @@
             e = this.track.mediaDownloadUrl
               ? appendTokenToMediaUrl(this.track.mediaDownloadUrl, t)
               : appendTokenToMediaUrl(
-                  `/api/media/download/${this.track.hash}`,
+                  `/asmr-library/api/media/download/${this.track.hash}`,
                   t,
                 ),
             s = document.createElement("a");
@@ -14147,7 +14147,7 @@
           const e = this.$q.localStorage.getItem("jwt-token") || "",
             s = t.mediaDownloadUrl
               ? appendTokenToMediaUrl(t.mediaDownloadUrl, e)
-              : appendTokenToMediaUrl(`/api/media/download/${t.hash}`, e),
+              : appendTokenToMediaUrl(`/asmr-library/api/media/download/${t.hash}`, e),
             a = document.createElement("a");
           ((a.href = s), (a.target = "_blank"), a.click());
         },
@@ -14174,7 +14174,7 @@
         setVisualPlayerCover(t) {
           if (!t) return;
           const e = withMediaFileBaseUrl(
-            t.mediaDownloadUrl ? "" + t.mediaDownloadUrl : "/api/media/download/" + t.hash,
+            t.mediaDownloadUrl ? "" + t.mediaDownloadUrl : "/asmr-library/api/media/download/" + t.hash,
           );
           (this.$store.commit("AudioPlayer/SET_VISUAL_PLAYER_COVER_URL", e),
             this.$q.notify({
@@ -14193,7 +14193,7 @@
           const e = this.$q.localStorage.getItem("jwt-token") || "",
             s = t.mediaStreamUrl
               ? appendTokenToMediaUrl(t.mediaStreamUrl, e)
-              : appendTokenToMediaUrl(`/api/media/stream/${t.hash}`, e),
+              : appendTokenToMediaUrl(`/asmr-library/api/media/stream/${t.hash}`, e),
             a = document.createElement("a");
           ((a.href = s), (a.target = "_blank"), a.click());
         },
@@ -14204,7 +14204,7 @@
 	              : "image",
 	            a = t.mediaStreamUrl
 	              ? `${t.mediaStreamUrl}`
-	              : `/api/media/stream/${t.hash}/${s}`,
+	              : `/asmr-library/api/media/stream/${t.hash}/${s}`,
 	            i =
 	              /^\/api\/media\/stream\//.test(a) &&
 	              !/\.(jpe?g|png|webp|gif|bmp)(?:\?|$)/i.test(a)
@@ -14371,7 +14371,7 @@
           const e = this.$q.localStorage.getItem("jwt-token") || "",
             s = t.mediaStreamUrl
               ? appendTokenToMediaUrl(t.mediaStreamUrl, e)
-              : appendTokenToMediaUrl(`/api/media/stream/${t.hash}`, e);
+              : appendTokenToMediaUrl(`/asmr-library/api/media/stream/${t.hash}`, e);
           return s;
         },
 	        openPreviewImgFullscreen() {
@@ -14653,7 +14653,7 @@
 	          try {
 	            const e = await rrRetryRequest(
 	              () =>
-	                this.$axios.get("/api/work/" + this.workid, {
+	                this.$axios.get("/asmr-library/api/work/" + this.workid, {
 	                  params: { t: this.$route.query.t || "" },
 	                }),
 	              { retries: 2, delay: 300 },
@@ -14682,7 +14682,7 @@
           const t = this.requestSeq;
           try {
             const e = await rrRetryRequest(
-              () => this.$axios.get("/api/tracks/" + this.workid),
+              () => this.$axios.get("/asmr-library/api/tracks/" + this.workid),
               { retries: 2, delay: 300 },
             );
             if (t !== this.requestSeq) return;
@@ -14817,7 +14817,7 @@
       },
       computed: {
         url() {
-          return `/api/${this.restrict}/`;
+          return `/asmr-library/api/${this.restrict}/`;
         },
         queryField() {
           switch (this.restrict) {
@@ -14972,7 +14972,7 @@
   }
   async function rrRequireAdmin() {
     try {
-      (await _.a.get("/api/config/admin"), rrCommitAdminUser());
+      (await _.a.get("/asmr-library/api/config/admin"), rrCommitAdminUser());
       return !0;
     } catch (t) {
       return !1;
@@ -14992,7 +14992,7 @@
         })
         .onOk((e) => {
           _.a
-            .post("/api/auth/me", { name: "admin", password: e })
+            .post("/asmr-library/api/auth/me", { name: "admin", password: e })
             .then((e) => {
               (n["a"].set("jwt-token", e.data.token),
                 sr(e.data.token),
@@ -15051,7 +15051,7 @@
       methods: {
         onSubmit() {
           this.$axios
-            .post("/api/auth/me", { name: this.name, password: this.password })
+            .post("/asmr-library/api/auth/me", { name: this.name, password: this.password })
             .then((t) => {
               try {
                 (this.$q.localStorage.set("jwt-token", t.data.token),
@@ -15565,7 +15565,7 @@
         coverUrl() {
           const t = this.$q.localStorage.getItem("jwt-token") || "";
           return this.workid
-            ? `/api/cover/${this.workid}?type=240x240&token=${t}`
+            ? `/asmr-library/api/cover/${this.workid}?type=240x240&token=${t}`
             : "";
         },
       },
@@ -15603,7 +15603,7 @@
         submitRating(t) {
           const e = { starOnly: !0 };
           this.$axios
-            .put("/api/review", t, { params: e })
+            .put("/asmr-library/api/review", t, { params: e })
             .then((t) => {
               this.showSuccNotif(t.data.message);
             })
@@ -15628,7 +15628,7 @@
         submitProgress(t) {
           const e = { starOnly: !1, progressOnly: !0 };
           this.$axios
-            .put("/api/review", t, { params: e })
+            .put("/asmr-library/api/review", t, { params: e })
             .then((t) => {
               this.showSuccNotif(t.data.message);
             })
@@ -15762,7 +15762,7 @@
             "nsfw" === this.sortBy.order &&
               ((t.order = "nsfw"), (t.sort = "desc")),
             "progress" === this.mode && (t.filter = this.progressFilter));
-          const e = "histroy" == this.mode ? "/api/histroy" : "api/review";
+          const e = "histroy" == this.mode ? "/asmr-library/api/histroy" : "api/review";
           return this.$axios
             .get(e, { params: t })
             .then((e) => {
@@ -16761,7 +16761,7 @@
         },
         samCoverUrl(t) {
           const e = this.$q.localStorage.getItem("jwt-token") || "";
-          return `/api/cover/${t}?type=sam&token=${e}`;
+          return `/asmr-library/api/cover/${t}?type=sam&token=${e}`;
         },
         copyToClipboard(t, e) {
           Object(Nr["a"])("" + t).then(() => {
@@ -17032,7 +17032,7 @@
       methods: {
         requestConfig() {
           this.$axios
-            .get("/api/config/admin")
+            .get("/asmr-library/api/config/admin")
             .then((t) => {
               ((this.config = t.data.config),
                 (this.rootFolder.path = t.data.config.voiceWorkDefaultPath));
@@ -17050,7 +17050,7 @@
         onSubmit() {
           ((this.loading = !0),
             this.$axios
-              .put("/api/config/admin", { config: this.config })
+              .put("/asmr-library/api/config/admin", { config: this.config })
               .then((t) => {
                 (this.showSuccNotif(t.data.message), (this.loading = !1));
               })
@@ -19630,7 +19630,7 @@
       methods: {
         requestConfig() {
           this.$axios
-            .get("/api/config/admin")
+            .get("/asmr-library/api/config/admin")
             .then((t) => {
               ((this.config = t.data.config),
                 this.$set(this.config, "scraperSources",
@@ -19673,7 +19673,7 @@
             (this.config.forwardSeekTime = parseInt(this.forwardSeekTime)),
             (this.loading = !0),
             this.$axios
-              .put("/api/config/admin", { config: this.config })
+              .put("/asmr-library/api/config/admin", { config: this.config })
               .then((t) => {
                 ((this.loading = !1), this.showSuccNotif(t.data.message));
               })
@@ -19707,7 +19707,7 @@
             this.$set(this.config, "audioPlayerVersion", t),
             this.$store.commit("AudioPlayer/SET_AUDIO_PLAYER_VERSION", t),
             this.$axios
-              .put("/api/config/admin", { config: { audioPlayerVersion: t } })
+              .put("/asmr-library/api/config/admin", { config: { audioPlayerVersion: t } })
               .then((t) => {
                 this.showSuccNotif(t.data.message);
               })
@@ -19730,7 +19730,7 @@
             })
             .onOk(async () => {
               this.$axios
-                .post("/api/uncensor/tags")
+                .post("/asmr-library/api/uncensor/tags")
                 .then((t) => {
                   this.$q.notify("修改成功");
                 })
@@ -20165,7 +20165,7 @@
         addNewUser() {
           ((this.loadingAddNewUser = !0),
             this.$axios
-              .post("/api/credentials/user", {
+              .post("/asmr-library/api/credentials/user", {
                 name: this.newuser.name,
                 password: this.newuser.password,
                 group: this.newuser.group,
@@ -20191,7 +20191,7 @@
         deleteUsers() {
           ((this.loadingDeleteUsers = !0),
             this.$axios
-              .delete("/api/credentials/user", {
+              .delete("/asmr-library/api/credentials/user", {
                 data: { users: this.selected },
               })
               .then((t) => {
@@ -20218,7 +20218,7 @@
         updateAdminPassword() {
           ((this.loadingUpdateAdminPassword = !0),
             this.$axios
-              .put("/api/credentials/user", {
+              .put("/asmr-library/api/credentials/user", {
                 name: "admin",
                 newPassword: this.adminNewPassword,
               })
@@ -20245,7 +20245,7 @@
         },
         requestUsers() {
           this.$axios
-            .get("/api/credentials/users")
+            .get("/asmr-library/api/credentials/users")
             .then((t) => {
               this.users = t.data.users;
             })
@@ -21145,8 +21145,8 @@
           host: "",
           metaApi: "",
           trackApi: "",
-          defaultMetaApi: "/api/workInfo/{code_for_the_work}",
-          defaultTrackApi: "/api/tracks/{code_for_the_work}",
+          defaultMetaApi: "/asmr-library/api/workInfo/{code_for_the_work}",
+          defaultTrackApi: "/asmr-library/api/tracks/{code_for_the_work}",
           filter: "",
           filterValidateRegex: /^[A-Za-z]{2}((\d{6})|(\d{8}))$/,
           selectRootFolder: null,
@@ -22435,7 +22435,7 @@
           return this.appendTokenToUrl(
             t.mediaDownloadUrl
               ? `${t.mediaDownloadUrl}`
-              : `/api/media/download/${t.hash}`,
+              : `/asmr-library/api/media/download/${t.hash}`,
           );
         },
 	        downloadFilenameForFallback(t) {
