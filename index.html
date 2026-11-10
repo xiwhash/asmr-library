@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<base href="/asmr-library/">
+<title>我的音声库</title>
+<meta charset="utf-8">
+<meta name="description" content="我的音声库 - 作品列表">
+<meta name="format-detection" content="telephone=no">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#027be3">
+<link rel="icon" type="image/png" href="statics/app-logo-128x128.png">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<noscript>需要 JavaScript 才能运行。</noscript>
+<div id="q-app"></div>
+<script>
+/* 1) 把前端硬编码的绝对 /api/ 请求重写到本子路径 */
+(function () {
+  var PREFIX = "/asmr-library";
+  function fix(u) {
+    if (typeof u === "string" && u.indexOf("/api/") === 0) return PREFIX + u;
+    return u;
+  }
+  var _fetch = window.fetch;
+  if (_fetch) {
+    window.fetch = function (input, init) {
+      try {
+        if (typeof input === "string") input = fix(input);
+        else if (input && input.url && input.url.indexOf("/api/") === 0) input = fix(input.url);
+      } catch (e) {}
+      return _fetch.call(this, input, init);
+    };
+  }
+  var _open = XMLHttpRequest.prototype.open;
+  XMLHttpRequest.prototype.open = function (method, url) {
+    var args = Array.prototype.slice.call(arguments);
+    args[1] = fix(url);
+    return _open.apply(this, args);
+  };
+})();
+
+/* 2) 注册 SW（scope 限定在子路径），首次加载等接管后再渲染 */
+(function () {
+  var booted = false;
+  function load(src, isModule) {
+    return new Promise(function (res) {
+      var s = document.createElement("script");
+      if (isModule) s.type = "module";
+      s.src = src;
+      s.onload = s.onerror = function () { res(); };
+      document.body.appendChild(s);
+    });
+  }
+  function start() {
+    if (booted) return;
+    booted = true;
+    load("vendor/videojs-v10/video.js", true)
+      .then(function () { return load("js/vendor.js"); })
+      .then(function () { return load("js/app.js"); });
+  }
+
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/asmr-library/sw.js", { scope: "/asmr-library/" })
+      .then(function () {
+        if (navigator.serviceWorker.controller) { start(); return; }
+        navigator.serviceWorker.ready.then(function () {
+          if (navigator.serviceWorker.controller) { start(); }
+          else { location.reload(); }
+        });
+        navigator.serviceWorker.addEventListener("controllerchange", start);
+      })
+      .catch(function () { start(); });
+  } else {
+    start();
+  }
+})();
+</script>
+</body>
+</html>
